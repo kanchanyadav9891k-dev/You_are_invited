@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>BHUPESH — Soulmate Database</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,sans-serif;background:#070816;color:#fff}
+body{overflow-x:hidden;background:radial-gradient(circle at 50% 0%,#25204b 0,#0c0b20 38%,#05050d 100%)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:44px 44px}
+.stars{position:fixed;inset:0;pointer-events:none;overflow:hidden}.star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.7;animation:twinkle 3s infinite alternate}
+@keyframes twinkle{to{opacity:.15;transform:scale(.5)}}@keyframes float{50%{transform:translateY(-12px)}}@keyframes glow{50%{box-shadow:0 0 30px #c99cff55}}
+.wrap{max-width:720px;margin:auto;min-height:100vh;padding:22px 16px 60px;position:relative}
+.screen{display:none;min-height:calc(100vh - 44px);align-items:center;justify-content:center;animation:fade .55s ease}.screen.active{display:flex}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card{width:100%;padding:30px 22px;border:1px solid #ffffff20;background:#ffffff0c;backdrop-filter:blur(18px);border-radius:28px;box-shadow:0 18px 70px #0008}
+.center{text-align:center}.eyebrow{font-size:11px;letter-spacing:3px;color:#cfc5ff;text-transform:uppercase}.title{font-family:Georgia,serif;font-size:clamp(34px,10vw,64px);line-height:1.02;margin:12px 0}.subtitle{color:#c8c5d8;line-height:1.6}.pink{color:#ffb8dc}.purple{color:#c9b4ff}
+.btn{width:100%;border:1px solid #ffffff25;border-radius:16px;padding:15px 18px;margin-top:12px;background:linear-gradient(135deg,#d7b5ff22,#ffafd522);color:#fff;font-weight:700;cursor:pointer;transition:.2s}.btn:hover,.option:hover{transform:translateY(-2px);background:#ffffff18;box-shadow:0 8px 28px #bda0ff22}.btn.primary{background:linear-gradient(135deg,#bca0ff,#ff9ed0);color:#130d22;border:0}
+.loading{font-family:monospace;color:#aaa6bd;line-height:1.9;margin:22px 0}.match{margin:24px 0;padding:20px;border:1px solid #ffffff20;border-radius:22px;background:#0005}.match b{font-size:24px}.progress{position:fixed;top:10px;left:50%;transform:translateX(-50%);font:11px monospace;color:#9d96b7;z-index:5}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.option{padding:18px 12px;border:1px solid #ffffff18;background:#ffffff09;border-radius:18px;cursor:pointer;transition:.2s;text-align:center}.option.selected{border-color:#e3b9ff;background:#c99cff20;box-shadow:0 0 25px #c99cff20}
+.question{font-size:20px;font-weight:700;line-height:1.35;margin:22px 0 8px}.small{font-size:13px;color:#aaa6bb}.result{margin-top:20px;padding:20px;border-radius:22px;background:#05050caa;border:1px solid #ffffff18}.bar{height:7px;background:#ffffff12;border-radius:99px;overflow:hidden;margin:7px 0 14px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#a991ff,#ffabd5);border-radius:99px}.stat{font-size:12px;letter-spacing:1px}.character{font-family:Georgia,serif;font-size:30px;color:#ffb9dc;margin:10px 0}.input{width:100%;padding:16px;border-radius:16px;border:1px solid #ffffff20;background:#0006;color:#fff;outline:none;font-size:16px;margin-top:14px}.textarea{min-height:140px;resize:vertical}.mystery{min-height:80px;font-family:monospace}.final .title{font-size:clamp(42px,13vw,80px)}.heart{font-size:52px;animation:float 2.4s ease-in-out infinite}.footer{text-align:center;color:#77738b;font-size:11px;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div id="progress" class="progress"></div>
+<main class="wrap">
+
+<section class="screen active" id="s0"><div class="card center">
+<div class="eyebrow">CLASSIFIED • SOULMATE DATABASE</div>
+<h1 class="title">SOULMATE<br><span class="purple">DATABASE</span></h1>
+<p class="subtitle">Initializing human recognition system…</p>
+<div class="loading" id="boot"></div>
+<div class="match" style="display:none" id="match"><div class="small">MATCH FOUND</div><b>BHUPESH</b><br><span class="small">26 SEPTEMBER • BIRTHDAY DETECTED</span></div>
+<p class="subtitle" id="warning" style="display:none">⚠️ This individual may contain excessive amounts of chaos, humour and questionable decisions.</p>
+<button class="btn primary" id="enter" style="display:none">ENTER THE DATABASE →</button>
+</div></section>
+
+<section class="screen" id="s1"><div class="card">
+<div class="eyebrow">01 / 11 • SOULMATE MACHINE</div><h2 class="title" style="font-size:38px">What kind of human are you?</h2><p class="subtitle">The universe gave us absolutely no useful information about you. So we're collecting some.</p>
+<div id="compat"></div>
+<button class="btn primary" id="compatNext" disabled>Continue →</button>
+</div></section>
+
+<section class="screen" id="s2"><div class="card">
+<div class="eyebrow">02 / 11 • HUMANITY TEST</div><h2 class="title" style="font-size:38px">Humanity Verification</h2><p class="subtitle">We need to determine whether you are actually a functioning human.</p>
+<div id="human"></div><button class="btn primary" id="humanNext" disabled>Next →</button>
+</div></section>
+
+<section class="screen" id="s3"><div class="card">
+<div class="eyebrow">03 / 11 • CHARACTER SELECT</div><h2 class="title" style="font-size:38px">Choose your character.</h2><div class="grid" id="chars"></div>
+<div id="charResult"></div><button class="btn primary" id="charNext" disabled>Continue →</button>
+</div></section>
+
+<section class="screen" id="s4"><div class="card">
+<div class="eyebrow">04 / 11 • PERFECT DAY</div><h2 class="title" style="font-size:38px">Design your perfect day.</h2><div id="day"></div><button class="btn primary" id="dayNext" disabled>Generate my day →</button>
+<div id="dayResult"></div>
+</div></section>
+
+<section class="screen" id="s5"><div class="card">
+<div class="eyebrow">05 / 11 • FUTURE SIMULATOR</div><h2 class="title" style="font-size:38px">Meet Future Bhupesh.</h2><div id="future"></div><button class="btn primary" id="futureNext" disabled>Open future report →</button><div id="futureResult"></div></div></section>
+
+<section class="screen" id="s6"><div class="card center">
+<div class="eyebrow">06 / 11 • CHAOS CHAMBER</div><h2 class="title" style="font-size:38px">DO NOT PRESS ANY BUTTON.</h2><p class="subtitle">Seriously. This system has been very clear.</p><div class="grid" id="mystery"></div><div id="mysteryResult" class="result" style="display:none"></div><button class="btn primary" id="mysteryNext" style="display:none">Okay fine, continue →</button>
+</div></section>
+
+<section class="screen" id="s7"><div class="card">
+<div class="eyebrow">07 / 11 • MESSAGE ARCHIVE</div><h2 class="title" style="font-size:38px">A message to future you.</h2><p class="subtitle">What is one thing you want your future self to remember?</p>
+<textarea id="futureMsg" class="input textarea" maxlength="600" placeholder="Write whatever comes to mind…"></textarea>
+<button class="btn primary" id="saveMsg" disabled>LOCK THIS MESSAGE 🔒</button><div id="savedMsg"></div>
+</div></section>
+
+<section class="screen" id="s8"><div class="card">
+<div class="eyebrow">08 / 11 • PROFILE GENERATOR</div><h2 class="title" style="font-size:38px">Soulmate Database Report</h2><div id="profile"></div>
+<button class="btn primary" id="profileNext">Reveal the final file →</button></div></section>
+
+<section class="screen" id="s9"><div class="card center">
+<div class="eyebrow">09 / 11 • FILE UNLOCKED</div><h2 class="title" style="font-size:44px">Okay…</h2>
+<p class="subtitle" style="font-size:19px">No more tests.<br>No more statistics.<br>No more chaos.</p>
+<p class="title" style="font-size:30px">Just one thing.</p>
+<p class="subtitle">Some people become part of your life so naturally that you don't even realize how important they've become until you stop and think about it.<br><br>You're one of those people, Bhupesh.<br><br>And honestly, I'm really glad you're here.</p>
+<button class="btn primary" id="reveal">Open birthday file →</button></div></section>
+
+<section class="screen" id="s10"><div class="card center final">
+<div class="heart">✦</div><div class="eyebrow">FINAL TRANSMISSION</div><h1 class="title">BHUPESH</h1><div class="eyebrow">26 SEPTEMBER</div><h2 style="font-family:Georgia,serif;font-size:32px;color:#ffb8dc">HAPPY BIRTHDAY ❤️</h2>
+<p class="subtitle">Another year unlocked.<br>Another chapter begins.<br><br>May this one be better than the last.</p>
+<div class="result" style="text-align:left"><b>SOULMATE STATUS: CONFIRMED ✓</b><br><br><b>FRIENDSHIP SUBSCRIPTION: LIFETIME ✓</b><br><br><b>ESCAPE OPTION: NOT AVAILABLE ✗</b><br><br><p>Stay exactly as wonderfully weird as you are. And thank you for being one of those rare people who make life a little more fun just by being around.<br><br>Here's to more memories, more chaos, more ridiculous conversations, and a lot more chapters ahead.<br><br><strong>Happy Birthday, soulmate. ❤️</strong></p></div>
+<button class="btn" id="restart">RESTART THE EXPERIENCE →</button></div></section>
+
+<div class="footer">A tiny cosmic birthday experiment • made with questionable science</div>
+</main>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+for(let i=0;i<75;i++){let x=document.createElement('i');x.className='star';x.style.left=Math.random()*100+'%';x.style.top=Math.random()*100+'%';x.style.animationDelay=Math.random()*3+'s';$('#stars').append(x)}
+let step=0, data={compat:[],human:[],char:'',day:[],future:[],msg:''};
+function go(n){$$('.screen').forEach(x=>x.classList.remove('active'));$('#s'+n).classList.add('active');step=n;$('#progress').textContent=n?`${String(n).padStart(2,'0')} / 11`:'';scrollTo(0,0)}
+let bootLines=['Scanning the universe…','Searching 8,000,000,000+ humans…','Analyzing personality patterns…','Checking birthday records…','Searching for today’s special human…'];
+let bi=0;function boot(){if(bi<bootLines.length){$('#boot').innerHTML+=bootLines[bi++]+'<br>';setTimeout(boot,430)}else{$$('#match,#warning,#enter').forEach(el=>el.style.display='block')}}boot();
+
+const compatQs=[
+['Pick the colour that feels most like you.',['Midnight blue','Blush pink','Silver','Electric purple']],
+['Choose your ideal place.',['Beach','Mountains','Big city','Somewhere nobody knows']],
+['Pick your current mood.',['Peaceful','Chaotic','Sleepy','Main character']],
+['Choose your biggest weakness.',['Overthinking','Procrastinating','Getting attached','Being too curious']],
+['Ideal midnight activity?',['Music','Deep talks','Food hunt','Random adventures']],
+['One word that describes you?',['Mysterious','Funny','Soft','Unpredictable']]
+];
+function renderChoice(container,qs,callback){let idx=0,ans=[];function draw(){container.innerHTML='';let [q,opts]=qs[idx];let h=document.createElement('div');h.className='question';h.textContent=q;container.append(h);let g=document.createElement('div');g.className='grid';opts.forEach((o,j)=>{let b=document.createElement('div');b.className='option';b.textContent=o;b.onclick=()=>{ans[idx]=j;container.querySelectorAll('.option').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');if(idx<qs.length-1){setTimeout(()=>{idx++;draw()},180)}else{callback(ans)}};g.append(b)});container.append(g);let s=document.createElement('div');s.className='small';s.style.marginTop='14px';s.textContent=`Question ${idx+1} of ${qs.length}`;container.append(s)}draw()}
+renderChoice($('#compat'),compatQs,a=>{data.compat=a;$('#compatNext').disabled=false;$('#compatNext').textContent='View my profile →';});
+$('#compatNext').onclick=()=>{let c=data.compat;let chaos=55+(c[3]||0)*8+(c[5]===3?12:0);$('#compat').innerHTML=`<div class="result"><div class="character">${chaos>75?'THE CHAOTIC DREAMER':'THE MYSTERIOUS ONE'}</div>${[['CHAOS LEVEL',chaos],['MAIN CHARACTER ENERGY',60+(c[1]||0)*9],['YAP POWER',65+(c[4]||0)*8],['ADVENTURE ENERGY',58+(c[1]||0)*10],['MYSTERY',70+(c[5]||0)*7],['BIRTHDAY ENERGY',100]].map(x=>`<div class="stat">${x[0]} — ${Math.min(100,x[1])}%</div><div class="bar"><i style="width:${Math.min(100,x[1])}%"></i></div>`).join('')}<p class="subtitle">Scientific accuracy: highly questionable. Vibes: extremely accurate.</p></div>`;$('#compatNext').onclick=()=>go(2);};
+
+const humanQs=[['You find ₹500 on the road.',['Look for the owner','Keep it','Ask nearby people','Freeze and overthink']],['“We need to talk.” Your reaction?',['Calmly reply','Panic internally','Call immediately','Pretend I never saw it']],['Friend says “I’m outside.” You…',['Open the door','Ask “where?”','Run outside','Realize you forgot']],['A message arrives at 2 AM.',['Reply instantly','Read and sleep','Send a meme','Overthink the meaning']],['One free day?',['Sleep','Go out','Binge something','Make a spontaneous plan']]];
+renderChoice($('#human'),humanQs,a=>{data.human=a;$('#humanNext').disabled=false});$('#humanNext').onclick=()=>{let c=data.human;let kindness=65+(c[0]===0?25:c[0]===2?12:0),chaos=55+(c[3]===2?25:0)+(c[4]===3?12:0);$('#human').innerHTML=`<div class="result"><h3>HUMANITY TEST COMPLETE ✓</h3><div class="stat">KINDNESS — ${Math.min(100,kindness)}%</div><div class="bar"><i style="width:${Math.min(100,kindness)}%"></i></div><div class="stat">CHAOS — ${Math.min(100,chaos)}%</div><div class="bar"><i style="width:${Math.min(100,chaos)}%"></i></div><div class="stat">SURVIVAL INSTINCT — ${55+(c[2]||0)*9}%</div><div class="bar"><i style="width:${55+(c[2]||0)*9}%"></i></div><p class="subtitle">Common Sense: SYSTEM TEMPORARILY UNAVAILABLE 💀</p></div>`;$('#humanNext').textContent='Continue →';$('#humanNext').onclick=()=>go(3)};
+
+const chars=['THE MAIN CHARACTER','THE CHAOTIC DREAMER','THE PROFESSIONAL YAPPER','THE OVERTHINKER','THE FRIENDSHIP THERAPIST','THE CERTIFIED MENACE'];
+$('#chars').innerHTML=chars.map((x,i)=>`<div class="option" data-i="${i}">${x}</div>`).join('');$$('#chars .option').forEach(b=>b.onclick=()=>{data.char=chars[+b.dataset.i];$$('#chars .option').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');$('#charResult').innerHTML=`<div class="result"><div class="character">${data.char}</div><p class="subtitle">Strengths: loyal • entertaining • unforgettable<br>Weaknesses: questionable decisions • excessive lore<br><br><b>Special ability:</b> Turning a 5-minute conversation into a 3-hour lore dump.<br><b>Birthday power:</b> Making ordinary days more memorable.</p></div>`;$('#charNext').disabled=false});$('#charNext').onclick=()=>go(4);
+
+const dayQs=[['Ideal location?',['Beach','Mountains']],['Best time?',['Morning','Night']],['Food?',['Pizza','Noodles']],['Entertainment?',['Movies','Games']],['Company?',['Friends','Alone time']],['Lifestyle?',['Travel','Stay home']],['Choose one.',['Money','Adventure']]];
+renderChoice($('#day'),dayQs,a=>{data.day=a;$('#dayNext').disabled=false});$('#dayNext').onclick=()=>{$('#dayResult').innerHTML=`<div class="result"><h3>PERFECT DAY GENERATED ✦</h3><p class="subtitle">According to our extremely advanced scientific calculations… your perfect day involves ${data.day[0]===0?'the beach':'the mountains'}, ${data.day[1]===0?'early starts':'late nights'}, ${data.day[2]===0?'pizza':'noodles'}, ${data.day[3]===0?'movies':'games'}, ${data.day[4]===0?'good company':'peace and quiet'}, and ${data.day[6]===0?'a suspicious amount of money':'an irresponsible amount of adventure'}.</p></div>`;$('#dayNext').textContent='Continue →';$('#dayNext').onclick=()=>go(5)};
+
+const futureQs=[['Dream destination?',['Paris','Tokyo','New York','Somewhere tropical']],['Dream lifestyle?',['Creative','Successful','Adventurous','Peaceful']],['This year you want…',['Growth','Love','Money','Memories']],['Experience you want?',['Travel','Concert','Big achievement','Something unexpected']],['Leave behind…',['Doubt','Fear','Bad habits','Overthinking']]];
+renderChoice($('#future'),futureQs,a=>{data.future=a;$('#futureNext').disabled=false});$('#futureNext').onclick=()=>{$('#futureResult').innerHTML=`<div class="result"><h3>FUTURE BHUPESH DETECTED</h3><p class="subtitle">LOCATION: ${futureQs[0][1][data.future[0]]}<br>ENERGY: ${futureQs[1][1][data.future[1]]}<br>GOAL: ${futureQs[2][1][data.future[2]]}<br>ADVENTURE: ${futureQs[3][1][data.future[3]]}<br>RELEASED BAGGAGE: ${futureQs[4][1][data.future[4]]}<br><br>Prediction confidence: Questionable.<br>But we're rooting for this timeline. ✦</p></div>`;$('#futureNext').textContent='Continue →';$('#futureNext').onclick=()=>go(6)};
+
+let clicks=0;const mysteryMsgs=['Congratulations. You have achieved absolutely nothing.','Your curiosity has been documented.','System has judged you. System refuses to elaborate.','You were specifically told not to press this.','The universe has filed a complaint.','Okay fine. You win.'];$('#mystery').innerHTML=['DO NOT PRESS','ABSOLUTELY NOT','VERY DANGEROUS','SERIOUSLY DON’T','WHY ARE YOU STILL HERE?','ONE LAST BUTTON'].map((x,i)=>`<button class="btn mystery" data-i="${i}">${x}</button>`).join('');$$('#mystery .mystery').forEach(b=>b.onclick=()=>{clicks++;$('#mysteryResult').style.display='block';$('#mysteryResult').textContent=mysteryMsgs[Math.min(clicks-1,mysteryMsgs.length-1)];if(clicks>=6)$('#mysteryNext').style.display='block'});$('#mysteryNext').onclick=()=>go(7);
+
+$('#futureMsg').oninput=e=>$('#saveMsg').disabled=!e.target.value.trim();$('#saveMsg').onclick=()=>{data.msg=$('#futureMsg').value.trim();$('#savedMsg').innerHTML=`<div class="result"><b>MESSAGE SAVED ✓</b><br><span class="small">AUTHOR: BHUPESH • DATE: 26 SEPTEMBER • ARCHIVE: LOCKED</span><p>“${data.msg.replace(/</g,'&lt;').replace(/>/g,'&gt;')}”</p><p class="subtitle">Maybe one day you'll come back here and realize how much can change in a year.</p></div><button class="btn primary" id="openProfile">Open final profile →</button>`;$('#saveMsg').style.display='none';setTimeout(()=>{const b=$('#openProfile');if(b)b.addEventListener('click',()=>go(8));},0)};
+
+document.addEventListener('click',e=>{if(e.target&&e.target.id==='openFinalProfile')go(8)});
+$('#profileNext').onclick=()=>go(9);
+$('#reveal').onclick=()=>go(10);
+$('#restart').onclick=()=>location.reload();
+$('#enter').onclick=()=>go(1);
+</script>
+</body></html>
